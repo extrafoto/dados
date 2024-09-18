@@ -1,72 +1,45 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário para Google Sheets</title>
+    <title>Mais Lidas - Globo e Extra</title>
 </head>
 <body>
-    <h1>Preencha o formulário</h1>
-    <form id="data-form">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" required><br><br>
-        
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
-        
-        <label for="mensagem">Mensagem:</label>
-        <textarea id="mensagem" name="mensagem" required></textarea><br><br>
-        
-        <button type="submit">Enviar</button>
-    </form>
+    <h1>Recirculação rápida das matérias mais lidas</h1>
+
+    <div id="globo-tables"></div>
 
     <script>
-        document.getElementById('data-form').addEventListener('submit', function(e) {
-            e.preventDefault(); // Previne o recarregamento da página
-
-            // Captura os dados do formulário
-            const nome = document.getElementById('nome').value;
-            const email = document.getElementById('email').value;
-            const mensagem = document.getElementById('mensagem').value;
-
-            // Verifica se todos os dados foram capturados corretamente
-            console.log({ nome, email, mensagem });
-
-            // Preparando os dados para envio
-            const data = {
-                nome: nome,
-                email: email,
-                mensagem: mensagem
-            };
-
-            // Substitua pela URL completa do seu Web App do Google Apps Script
-            const url = 'https://script.google.com/macros/s/AKfycbzvhwajAtyNZCbkm2LSRa2clX2HztPy3xX4dj0Mk2SxIA4fRHsmxzxaJd4poMBJ0JykQ/exec';
-            
-            // Verifica a URL antes de enviar a requisição
-            if (!url) {
-                console.error('URL de requisição não fornecida.');
-                alert('Erro: URL do Web App não encontrada.');
-                return;
+        // Função para enviar notícia ao backend
+        async function sendNewsToServer(title, category, url, source) {
+            try {
+                const response = await fetch('https://meu-backend.herokuapp.com/add-news', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title, category, url, source })
+                });
+                console.log('Notícia enviada com sucesso:', await response.text());
+            } catch (error) {
+                console.error('Erro ao enviar notícia:', error);
             }
+        }
 
-            // Fazendo o envio da requisição
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(result => {
-                console.log('Sucesso:', result);
-                alert("Dados enviados com sucesso!");
-            })
-            .catch(error => {
-                console.error('Erro ao enviar a requisição:', error);
-                alert("Erro ao enviar os dados.");
-            });
-        });
+        // Exemplo de como capturar e enviar os dados
+        function captureAndSendNews() {
+            const title = "Exemplo de Matéria";
+            const category = "Esportes";
+            const url = "https://oglobo.globo.com/esportes/exemplo";
+            const source = "Globo";
+
+            // Enviar para o backend
+            sendNewsToServer(title, category, url, source);
+        }
+
+        // Capturar e enviar automaticamente ao carregar a página
+        captureAndSendNews();
     </script>
 </body>
 </html>
