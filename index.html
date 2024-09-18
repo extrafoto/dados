@@ -29,6 +29,9 @@
             const email = document.getElementById('email').value;
             const mensagem = document.getElementById('mensagem').value;
 
+            // Verifica se todos os dados foram capturados corretamente
+            console.log({ nome, email, mensagem });
+
             // Preparando os dados para envio
             const data = {
                 nome: nome,
@@ -37,7 +40,17 @@
             };
 
             // Substitua pela URL completa do seu Web App do Google Apps Script
-            fetch('https://script.google.com/macros/s/AKfycbzvhwajAtyNZCbkm2LSRa2clX2HztPy3xX4dj0Mk2SxIA4fRHsmxzxaJd4poMBJ0JykQ/exec', {
+            const url = 'https://script.google.com/macros/s/AKfycbzvhwajAtyNZCbkm2LSRa2clX2HztPy3xX4dj0Mk2SxIA4fRHsmxzxaJd4poMBJ0JykQ/exec';
+            
+            // Verifica a URL antes de enviar a requisição
+            if (!url) {
+                console.error('URL de requisição não fornecida.');
+                alert('Erro: URL do Web App não encontrada.');
+                return;
+            }
+
+            // Fazendo o envio da requisição
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
