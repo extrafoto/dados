@@ -37,18 +37,21 @@
             };
 
             // Substitua pela URL completa do seu Web App do Google Apps Script
-            fetch('https://script.google.com/macros/s/AKfycbzvhwajAtyNZCbkm2LSRa2clX2HztPy3xX4dj0Mk2SxIA4fRHsmxzxaJd4poMBJ0JykQ/exec', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(result => {
-                console.log('Sucesso:', result);
-                alert("Dados enviados com sucesso!");
-            })
+            fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    mode: 'no-cors', // Adiciona este modo para ignorar temporariamente CORS
+    body: JSON.stringify(data),
+})
+.then(() => {
+    alert("Dados enviados com sucesso!");
+})
+.catch(error => {
+    console.error('Erro ao enviar os dados:', error);
+    alert("Erro ao enviar os dados.");
+});
             .catch(error => {
                 console.error('Erro ao enviar a requisição:', error);
                 alert("Erro ao enviar os dados.");
