@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário para Google Sheets</title>
+</head>
+<body>
+    <h1>Preencha o formulário</h1>
+    <form id="data-form">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required><br><br>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="mensagem">Mensagem:</label>
+        <textarea id="mensagem" name="mensagem" required></textarea><br><br>
+        
+        <button type="submit">Enviar</button>
+    </form>
+
+    <script>
+        document.getElementById('data-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Previne o recarregamento da página
+
+            // Captura os dados do formulário
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const mensagem = document.getElementById('mensagem').value;
+
+            // Preparando os dados para envio
+            const data = {
+                nome: nome,
+                email: email,
+                mensagem: mensagem
+            };
+
+            // Substitua pela URL completa do seu Web App do Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbzvhwajAtyNZCbkm2LSRa2clX2HztPy3xX4dj0Mk2SxIA4fRHsmxzxaJd4poMBJ0JykQ/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Sucesso:', result);
+                alert("Dados enviados com sucesso!");
+            })
+            .catch(error => {
+                console.error('Erro ao enviar a requisição:', error);
+                alert("Erro ao enviar os dados.");
+            });
+        });
+    </script>
+</body>
+</html>
