@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mais Lidas - Globo e Extra</title>
+    <title>Mais Lidas - Globo, Extra e G1</title>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -41,7 +41,7 @@
             background-color: #45a049;
         }
         a {
-            color: white; /* Títulos clicáveis em branco */
+            color: #005a9c;
             text-decoration: none;
         }
         a:hover {
@@ -65,6 +65,9 @@
         .editoria-title-extra {
             background-color: #e40100; /* Vermelho para Extra */
         }
+        .editoria-title-g1 {
+            background-color: #ff5a00; /* Laranja para G1 */
+        }
         /* Header com âncoras */
         header {
             background-color: #005a9c;
@@ -81,74 +84,19 @@
         nav a:hover {
             text-decoration: underline;
         }
-        /* Lightbox CSS */
-        .lightbox {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            overflow: auto;
-        }
-        .lightbox-content {
-            position: relative;
-            margin: 15% auto;
-            padding: 20px;
-            width: 80%;
-            max-width: 600px;
-            background-color: white;
-            color: black;
-            border-radius: 10px;
-        }
-        .lightbox-content h2 {
-            text-align: center;
-            margin-top: 0;
-        }
-        .close-lightbox {
-            position: absolute;
-            top: 10px;
-            right: 25px;
-            color: black;
-            font-size: 35px;
-            font-weight: bold;
-        }
-        .close-lightbox:hover, .close-lightbox:focus {
-            color: red;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Header com âncoras para Globo e Extra e Sobre -->
+    <!-- Header com âncoras para Globo, Extra, G1 -->
     <header>
-        <h1>Recirculação rápida das matérias mais lidas do Globo e Extra</h1>
+        <h1>Recirculação rápida das matérias mais lidas do Globo, Extra e G1</h1>
         <nav>
             <a href="#globo-section">Globo</a>
             <a href="#extra-section">Extra</a>
-            <a href="javascript:void(0)" onclick="openLightbox()">Sobre</a>
+            <a href="#g1-section">G1</a>
         </nav>
     </header>
-
-    <!-- Lightbox (Sobre) -->
-    <div id="lightbox" class="lightbox">
-        <div class="lightbox-content">
-            <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
-            <h2>Sobre esta Página</h2>
-            <p>Esta página foi criada para facilitar e agilizar o processo de recirculação de matérias. Aqui, você encontrará links rápidos para as matérias mais lidas das editorias do Globo e Extra, permitindo que jornalistas acessem e reutilizem esses conteúdos de forma prática e eficiente. Com isso, o processo de construção de postagens é otimizado, garantindo um ganho significativo de tempo na produção, publicação e atualização de conteúdos, mantendo o foco na qualidade da informação sem perder tempo com buscas manuais.</p>
-            <p>Os links são capturados diretamente das páginas de notícias das editorias de cada site, e a página se atualiza automaticamente a cada 5 minutos para garantir que as informações estejam sempre atualizadas.</p>
-            <p>Você pode copiar o texto completo com o link ou apenas o link, usando os botões ao lado de cada matéria. Isso ajuda a facilitar o processo de colagem desses links em outros documentos ou plataformas de publicação.</p>
-            <p>A página captura as notícias das seguintes fontes:</p>
-            <ul>
-                <li><strong>Globo</strong>: https://oglobo.globo.com</li>
-                <li><strong>Extra</strong>: https://extra.globo.com</li>
-		<p>Versão deste código - v-mais-lidas-globo-extra-5 13/09/2024</p>
-            </ul>
-        </div>12:11 13/09/2024
-    </div>
 
     <!-- Seção Globo -->
     <h2 id="globo-section">Globo</h2>
@@ -160,20 +108,15 @@
     <div id="extra-tables"></div>
     <div id="extra-error" class="error"></div>
 
+    <!-- Seção G1 -->
+    <h2 id="g1-section">Mais Lidas - G1</h2>
+    <div id="g1-tables"></div>
+    <div id="g1-error" class="error"></div>
+
     <script>
-        // Função para abrir o lightbox
-        function openLightbox() {
-            document.getElementById('lightbox').style.display = 'block';
-        }
-
-        // Função para fechar o lightbox
-        function closeLightbox() {
-            document.getElementById('lightbox').style.display = 'none';
-        }
-
         // Função para copiar o texto com hiperlink
         function copyAsLink(text, url, button) {
-            const formattedLink = `${text} ${url.split('#')[0]}`; // Remove parte após #
+            const formattedLink = `${text} ${url.split('#')[0]}`;
             navigator.clipboard.writeText(formattedLink).then(() => {
                 button.textContent = 'Copiado!';
                 setTimeout(() => button.textContent = 'Copiar texto com link', 2000);
@@ -190,10 +133,10 @@
         }
 
         // Função para buscar "Mais Lidas" do Globo
-        async function fetchMaisLidasGlobo(url, containerId, errorId) {
+        async function fetchMaisLidasGlobo(url, containerId) {
             const proxyUrl = "https://api.allorigins.win/raw?url=";
             const container = document.getElementById(containerId);
-            const errorDiv = document.getElementById(errorId);
+            const errorDiv = document.getElementById('globo-error');
 
             try {
                 const response = await fetch(`${proxyUrl}${encodeURIComponent(url)}`);
@@ -202,9 +145,8 @@
                 const doc = parser.parseFromString(text, 'text/html');
 
                 const maisLidas = doc.querySelectorAll('.card__highlight__title a');
-
                 if (maisLidas.length === 0) {
-                    errorDiv.textContent = `Nenhuma matéria 'Mais Lida' encontrada.`;
+                    errorDiv.textContent = `Nenhuma matéria "Mais Lida" encontrada no Globo.`;
                     return;
                 }
 
@@ -263,68 +205,127 @@
                 }
 
                 if (categoryLinks.length === 0) {
-                    container.innerHTML = 'Nenhuma matéria "Mais Lida" encontrada.';
+                    container.innerHTML = 'Nenhuma matéria "Mais Lida" encontrada no Globo.';
                 }
             } catch (error) {
                 errorDiv.textContent = `Erro ao buscar as URLs: ${error.message}`;
-                console.error(`Erro ao buscar as URLs:`, error);
+                console.error(`Erro ao buscar as URLs do Globo:`, error);
             }
         }
 
         // Função para buscar "Mais Lidas" do Extra
-        // Função para enviar os dados para o Webhook
-async function enviarParaWebhook(materia) {
-    const webhookUrl = 'URL_DO_SEU_WEBHOOK_DO_MAKE';
-    
-    try {
-        const response = await fetch(webhookUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(materia) // Envia a matéria em formato JSON
-        });
-        console.log('Dados enviados com sucesso:', response);
-    } catch (error) {
-        console.error('Erro ao enviar dados para o Webhook:', error);
-    }
-}
+        async function fetchMaisLidasExtra(url, containerId) {
+            const proxyUrl = "https://api.allorigins.win/raw?url=";
 
-// Exemplo de como capturar e enviar as matérias mais lidas
-function enviarMaisLidas(maisLidas) {
-    maisLidas.forEach(materia => {
-        enviarParaWebhook({
-            titulo: materia.textContent,
-            link: materia.href
-        });
-    });
-}
+            try {
+                const response = await fetch(`${proxyUrl}${encodeURIComponent(url)}`);
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
 
-// Função para buscar as mais lidas e enviar para o Webhook
-async function fetchMaisLidasGlobo(url) {
-    const proxyUrl = "https://api.allorigins.win/raw?url=";
-    
-    try {
-        const response = await fetch(`${proxyUrl}${encodeURIComponent(url)}`);
-        const text = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(text, 'text/html');
-        
-        const maisLidas = doc.querySelectorAll('.card__highlight__title a');
-        
-        if (maisLidas.length > 0) {
-            enviarMaisLidas(maisLidas); // Envia as matérias mais lidas para o Webhook
-        } else {
-            console.log('Nenhuma matéria encontrada.');
+                const maisLidas = doc.querySelectorAll('.card__highlight__title a');
+                const container = document.getElementById(containerId);
+                container.innerHTML = ''; // Limpa o conteúdo anterior
+
+                if (maisLidas.length > 0) {
+                    const ul = document.createElement('ul');
+                    maisLidas.forEach(link => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="${link.href}" target="_blank">${link.textContent}</a>`;
+                        ul.appendChild(li);
+                    });
+                    container.appendChild(ul);
+                } else {
+                    container.innerHTML = 'Nenhuma matéria "Mais Lida" encontrada no Extra.';
+                }
+            } catch (error) {
+                console.error('Erro ao buscar as mais lidas do Extra:', error);
+                container.innerHTML = 'Erro ao buscar as mais lidas do Extra.';
+            }
         }
-    } catch (error) {
-        console.error('Erro ao buscar matérias:', error);
-    }
-}
 
-// Chama a função para buscar e enviar as matérias mais lidas
-fetchMaisLidasGlobo('https://oglobo.globo.com/');
+        // Função para buscar "Mais Lidas" do G1
+        async function fetchMaisLidasG1() {
+            const proxyUrl = "https://api.allorigins.win/raw?url=";
+            const g1Url = "https://g1.globo.com/";
+            const container = document.getElementById('g1-tables');
+            const errorDiv = document.getElementById('g1-error');
 
+            try {
+                const response = await fetch(`${proxyUrl}${encodeURIComponent(g1Url)}`);
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+
+                const maisLidas = doc.querySelectorAll('a[data-mrf-recirculation="Mais Lidas"]');
+
+                if (maisLidas.length === 0) {
+                    errorDiv.textContent = `Nenhuma matéria 'Mais Lida' encontrada no G1.`;
+                    return;
+                }
+
+                container.innerHTML = ''; // Limpa o container
+
+                const categoryLinks = [];
+                maisLidas.forEach(link => {
+                    const href = link.href;
+                    const textContent = link.querySelector('.post-mais-lidas__title').textContent.trim();
+                    if (textContent && href) {
+                        categoryLinks.push({ href, textContent });
+                    }
+                });
+
+                if (categoryLinks.length > 0) {
+                    const table = document.createElement('table');
+                    const thead = document.createElement('thead');
+                    thead.innerHTML = `
+                        <tr>
+                            <th>Matéria</th>
+                            <th>Ações</th>
+                        </tr>
+                    `;
+                    table.appendChild(thead);
+
+                    const tbody = document.createElement('tbody');
+                    categoryLinks.slice(0, 5).forEach(link => {
+                        const row = document.createElement('tr');
+
+                        const descriptionCell = document.createElement('td');
+                        descriptionCell.innerHTML = `<a href="${link.href}" target="_blank" class="table-links">${link.textContent}</a>`;
+
+                        const copyButtonCell = document.createElement('td');
+
+                        // Botão para copiar título + link
+                        const copyButton = document.createElement('button');
+                        copyButton.textContent = 'Copiar texto com link';
+                        copyButton.onclick = () => copyAsLink(link.textContent, link.href, copyButton);
+
+                        // Botão para copiar apenas o link
+                        const copyLinkButton = document.createElement('button');
+                        copyLinkButton.textContent = 'Copiar apenas o link';
+                        copyLinkButton.onclick = () => copyOnlyLink(link.href, copyLinkButton);
+
+                        copyButtonCell.appendChild(copyButton);
+                        copyButtonCell.appendChild(copyLinkButton);
+
+                        row.appendChild(descriptionCell);
+                        row.appendChild(copyButtonCell);
+
+                        tbody.appendChild(row);
+                    });
+
+                    table.appendChild(tbody);
+                    container.appendChild(table);
+                }
+
+                if (categoryLinks.length === 0) {
+                    container.innerHTML = 'Nenhuma matéria "Mais Lida" encontrada no G1.';
+                }
+            } catch (error) {
+                errorDiv.textContent = `Erro ao buscar as URLs do G1: ${error.message}`;
+                console.error(`Erro ao buscar as URLs do G1:`, error);
+            }
+        }
 
         // Função para buscar "Mais Lidas" de todas as editorias do Globo
         function fetchAllEditoriasGlobo() {
@@ -354,7 +355,7 @@ fetchMaisLidasGlobo('https://oglobo.globo.com/');
                 editoriaContainer.id = `globo-editoria-${editoria.name.toLowerCase()}`;
                 container.appendChild(editoriaContainer);
 
-                fetchMaisLidasGlobo(editoria.url, editoriaContainer.id, 'globo-error');
+                fetchMaisLidasGlobo(editoria.url, editoriaContainer.id);
             });
         }
 
@@ -387,14 +388,16 @@ fetchMaisLidasGlobo('https://oglobo.globo.com/');
             });
         }
 
-        // Funções de busca para Globo e Extra
+        // Funções de busca para Globo, Extra e G1
         fetchAllEditoriasGlobo();
         fetchAllEditoriasExtra();
+        fetchMaisLidasG1();
 
         // Atualiza as listas a cada 5 minutos
         setInterval(function() {
             fetchAllEditoriasGlobo();
             fetchAllEditoriasExtra();
+            fetchMaisLidasG1();
         }, 300000); // 5 minutos
     </script>
 
