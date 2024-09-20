@@ -3,408 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mais Lidas - Globo e Extra</title>
+    <title>Inserir Matérias no Google Sheets</title>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             margin: 20px;
         }
         h1 {
-            color: white; /* Título do header branco */
-        }
-        h2 {
-            margin-top: 30px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
+            color: #333;
         }
         button {
-            padding: 5px 10px;
+            padding: 10px 20px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        a {
-            color: white; /* Títulos clicáveis em branco */
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .table-links {
-            color: #005a9c; /* Cor visível para os links nas tabelas */
-            text-decoration: none;
-        }
-        .table-links:hover {
-            text-decoration: underline;
-        }
-        .editoria-title {
-            margin-top: 50px;
-            padding: 10px;
-            color: white;
-        }
-        .editoria-title-globo {
-            background-color: #005a9c; /* Azul para Globo */
-        }
-        .editoria-title-extra {
-            background-color: #e40100; /* Vermelho para Extra */
-        }
-        /* Header com âncoras */
-        header {
-            background-color: #005a9c;
-            padding: 15px;
-            text-align: center;
-            color: white;
-        }
-        nav a {
-            margin: 0 15px;
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        /* Lightbox CSS */
-        .lightbox {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            overflow: auto;
-        }
-        .lightbox-content {
-            position: relative;
-            margin: 15% auto;
-            padding: 20px;
-            width: 80%;
-            max-width: 600px;
-            background-color: white;
-            color: black;
-            border-radius: 10px;
-        }
-        .lightbox-content h2 {
-            text-align: center;
-            margin-top: 0;
-        }
-        .close-lightbox {
-            position: absolute;
-            top: 10px;
-            right: 25px;
-            color: black;
-            font-size: 35px;
-            font-weight: bold;
-        }
-        .close-lightbox:hover, .close-lightbox:focus {
-            color: red;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <!-- Header com âncoras para Globo e Extra e Sobre -->
-    <header>
-        <h1>Recirculação rápida das matérias mais lidas do Globo e Extra</h1>
-        <nav>
-            <a href="#globo-section">Globo</a>
-            <a href="#extra-section">Extra</a>
-            <a href="javascript:void(0)" onclick="openLightbox()">Sobre</a>
-        </nav>
-    </header>
-
-    <!-- Lightbox (Sobre) -->
-    <div id="lightbox" class="lightbox">
-        <div class="lightbox-content">
-            <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
-            <h2>Sobre esta Página</h2>
-            <p>Esta página foi criada para facilitar e agilizar o processo de recirculação de matérias. Aqui, você encontrará links rápidos para as matérias mais lidas das editorias do Globo e Extra, permitindo que jornalistas acessem e reutilizem esses conteúdos de forma prática e eficiente. Com isso, o processo de construção de postagens é otimizado, garantindo um ganho significativo de tempo na produção, publicação e atualização de conteúdos, mantendo o foco na qualidade da informação sem perder tempo com buscas manuais.</p>
-            <p>Os links são capturados diretamente das páginas de notícias das editorias de cada site, e a página se atualiza automaticamente a cada 5 minutos para garantir que as informações estejam sempre atualizadas.</p>
-            <p>Você pode copiar o texto completo com o link ou apenas o link, usando os botões ao lado de cada matéria. Isso ajuda a facilitar o processo de colagem desses links em outros documentos ou plataformas de publicação.</p>
-            <p>A página captura as notícias das seguintes fontes:</p>
-            <ul>
-                <li><strong>Globo</strong>: https://oglobo.globo.com</li>
-                <li><strong>Extra</strong>: https://extra.globo.com</li>
-		<p>Versão deste código - v-mais-lidas-globo-extra-5 13/09/2024</p>
-            </ul>
-        </div>12:11 13/09/2024
-    </div>
-
-    <!-- Seção Globo -->
-    <h2 id="globo-section">Globo</h2>
-    <div id="globo-tables"></div>
-    <div id="globo-error" class="error"></div>
-
-    <!-- Seção Extra -->
-    <h2 id="extra-section">Extra</h2>
-    <div id="extra-tables"></div>
-    <div id="extra-error" class="error"></div>
+    <h1>Inserir Matérias no Google Sheets</h1>
+    <button id="inserir-materias">Enviar Matérias para o Google Sheets</button>
 
     <script>
-        // Função para abrir o lightbox
-        function openLightbox() {
-            document.getElementById('lightbox').style.display = 'block';
-        }
+        // Função para enviar dados capturados para o Google Sheets
+        async function inserirNoGoogleSheets(titulo, link) {
+            const apiKey = 'AIzaSyCr_GlRIXzldcsamu_qfxE5DO69HspfcRw'; // Sua chave de API
+            const spreadsheetId = '1LNiJ70U5YgCem9-ju71M6_NDCfEoSt0PaN7FslviT68'; // ID da planilha
+            const sheetName = 'Sheet1'; // Nome da folha que deseja inserir os dados
+            const range = `${sheetName}!A:B`; // Intervalo onde os dados serão inseridos
 
-        // Função para fechar o lightbox
-        function closeLightbox() {
-            document.getElementById('lightbox').style.display = 'none';
-        }
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}:append?valueInputOption=USER_ENTERED&key=${apiKey}`;
+            
+            const body = {
+                values: [
+                    [titulo, link]
+                ]
+            };
 
-        // Função para copiar o texto com hiperlink
-        function copyAsLink(text, url, button) {
-            const formattedLink = `${text} ${url.split('#')[0]}`; // Remove parte após #
-            navigator.clipboard.writeText(formattedLink).then(() => {
-                button.textContent = 'Copiado!';
-                setTimeout(() => button.textContent = 'Copiar texto com link', 2000);
-            });
-        }
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                });
 
-        // Função para copiar apenas o link
-        function copyOnlyLink(url, button) {
-            const cleanUrl = url.split('#')[0];
-            navigator.clipboard.writeText(cleanUrl).then(() => {
-                button.textContent = 'Link copiado!';
-                setTimeout(() => button.textContent = 'Copiar apenas o link', 2000);
-            });
-        }
-
-        / Função para enviar os dados para o Webhook do Make.com
-async function enviarParaWebhook(materia) {
-    const webhookUrl = 'https://hook.us2.make.com/dtib43i0netxfk66v7oscqk5rpft23fi'; // Substitua pela URL do Webhook fornecida pelo Make.com
-    
-    try {
-        const response = await fetch(webhookUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(materia) // Envia a matéria em formato JSON
-        });
-        console.log('Dados enviados com sucesso:', response);
-    } catch (error) {
-        console.error('Erro ao enviar dados para o Webhook:', error);
-    }
-}
-
-// Exemplo de como capturar e enviar as matérias mais lidas para o Webhook
-function enviarMaisLidas(maisLidas) {
-    maisLidas.forEach(link => {
-        const materia = {
-            titulo: link.textContent,
-            link: link.href
-        };
-        enviarParaWebhook(materia); // Envia cada matéria para o Webhook
-    });
-}
-
-// Função modificada para capturar matérias mais lidas do Globo e enviar para o Webhook
-async function fetchMaisLidasGlobo(url, containerId) {
-    const proxyUrl = "https://api.allorigins.win/raw?url=";
-    const container = document.getElementById(containerId);
-    const errorDiv = document.getElementById('globo-error');
-
-    try {
-        const response = await fetch(`${proxyUrl}${encodeURIComponent(url)}`);
-        const text = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(text, 'text/html');
-
-        const maisLidas = doc.querySelectorAll('.card__highlight__title a');
-        if (maisLidas.length === 0) {
-            errorDiv.textContent = `Nenhuma matéria "Mais Lida" encontrada no Globo.`;
-            return;
-        }
-
-        container.innerHTML = ''; // Limpa o container
-
-        enviarMaisLidas(maisLidas); // Envia as matérias mais lidas para o Webhook
-
-        const categoryLinks = [];
-        maisLidas.forEach(link => {
-            const href = link.href;
-            const textContent = link.textContent.trim();
-            if (textContent && href) {
-                categoryLinks.push({ href, textContent });
+                const result = await response.json();
+                if (response.ok) {
+                    console.log('Dados inseridos com sucesso:', result);
+                    alert('Matéria inserida com sucesso no Google Sheets!');
+                } else {
+                    console.error('Erro ao inserir dados:', result);
+                    alert('Erro ao inserir dados no Google Sheets.');
+                }
+            } catch (error) {
+                console.error('Erro ao inserir no Google Sheets:', error);
             }
-        });
-
-        if (categoryLinks.length > 0) {
-            const table = document.createElement('table');
-            const thead = document.createElement('thead');
-            thead.innerHTML = `
-                <tr>
-                    <th>Matéria</th>
-                    <th>Ações</th>
-                </tr>
-            `;
-            table.appendChild(thead);
-
-            const tbody = document.createElement('tbody');
-            categoryLinks.slice(0, 5).forEach(link => {
-                const row = document.createElement('tr');
-
-                const descriptionCell = document.createElement('td');
-                descriptionCell.innerHTML = `<a href="${link.href}" target="_blank" class="table-links">${link.textContent}</a>`;
-
-                const copyButtonCell = document.createElement('td');
-
-                // Botão para copiar título + link
-                const copyButton = document.createElement('button');
-                copyButton.textContent = 'Copiar texto com link';
-                copyButton.onclick = () => copyAsLink(link.textContent, link.href, copyButton);
-
-                // Botão para copiar apenas o link
-                const copyLinkButton = document.createElement('button');
-                copyLinkButton.textContent = 'Copiar apenas o link';
-                copyLinkButton.onclick = () => copyOnlyLink(link.href, copyLinkButton);
-
-                copyButtonCell.appendChild(copyButton);
-                copyButtonCell.appendChild(copyLinkButton);
-
-                row.appendChild(descriptionCell);
-                row.appendChild(copyButtonCell);
-
-                tbody.appendChild(row);
-            });
-
-            table.appendChild(tbody);
-            container.appendChild(table);
         }
 
-    } catch (error) {
-        errorDiv.textContent = `Erro ao buscar as URLs: ${error.message}`;
-        console.error(`Erro ao buscar as URLs do Globo:`, error);
-    }
-}
-
-
-// Exemplo de como capturar e enviar as matérias mais lidas
-function enviarMaisLidas(maisLidas) {
-    maisLidas.forEach(materia => {
-        enviarParaWebhook({
-            titulo: materia.textContent,
-            link: materia.href
-        });
-    });
-}
-
-// Função para buscar as mais lidas e enviar para o Webhook
-async function fetchMaisLidasGlobo(url) {
-    const proxyUrl = "https://api.allorigins.win/raw?url=";
-    
-    try {
-        const response = await fetch(`${proxyUrl}${encodeURIComponent(url)}`);
-        const text = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(text, 'text/html');
-        
-        const maisLidas = doc.querySelectorAll('.card__highlight__title a');
-        
-        if (maisLidas.length > 0) {
-            enviarMaisLidas(maisLidas); // Envia as matérias mais lidas para o Webhook
-        } else {
-            console.log('Nenhuma matéria encontrada.');
-        }
-    } catch (error) {
-        console.error('Erro ao buscar matérias:', error);
-    }
-}
-
-// Chama a função para buscar e enviar as matérias mais lidas
-fetchMaisLidasGlobo('https://oglobo.globo.com/');
-
-
-        // Função para buscar "Mais Lidas" de todas as editorias do Globo
-        function fetchAllEditoriasGlobo() {
-            const container = document.getElementById('globo-tables');
-            container.innerHTML = ''; // Limpa o container antes de popular com os dados
-
-            const editoriasGlobo = [
-                { name: "Home", url: "https://oglobo.globo.com/" },
-                { name: "Esportes", url: "https://oglobo.globo.com/esportes/" },
-                { name: "Cultura", url: "https://oglobo.globo.com/cultura/" },
-                { name: "Saúde", url: "https://oglobo.globo.com/saude/" },
-                { name: "Economia", url: "https://oglobo.globo.com/economia/" },
-                { name: "Mundo", url: "https://oglobo.globo.com/mundo/" },
-                { name: "Rio", url: "https://oglobo.globo.com/rio/" },
-                { name: "Brasil", url: "https://oglobo.globo.com/brasil/" },
-                { name: "Política", url: "https://oglobo.globo.com/politica/" },
-                { name: "Ela", url: "https://oglobo.globo.com/ela/" }
+        // Simulando a captura de matérias (substitua com seu código de captura real)
+        function capturarMaterias() {
+            const materias = [
+                { titulo: "Matéria 1", link: "https://example.com/materia1" },
+                { titulo: "Matéria 2", link: "https://example.com/materia2" }
             ];
-
-            editoriasGlobo.forEach(editoria => {
-                const editoriaTitle = document.createElement('h2');
-                editoriaTitle.innerHTML = `<a href="${editoria.url}" target="_blank">Mais Lidas - ${editoria.name}</a>`;
-                editoriaTitle.classList.add('editoria-title', 'editoria-title-globo');
-                container.appendChild(editoriaTitle);
-
-                const editoriaContainer = document.createElement('div');
-                editoriaContainer.id = `globo-editoria-${editoria.name.toLowerCase()}`;
-                container.appendChild(editoriaContainer);
-
-                fetchMaisLidasGlobo(editoria.url, editoriaContainer.id, 'globo-error');
-            });
+            return materias;
         }
 
-        // Função para buscar "Mais Lidas" de todas as editorias do Extra
-        function fetchAllEditoriasExtra() {
-            const container = document.getElementById('extra-tables');
-            container.innerHTML = ''; // Limpa o container antes de popular com os dados
+        // Evento ao clicar no botão para enviar as matérias
+        document.getElementById('inserir-materias').addEventListener('click', () => {
+            const materias = capturarMaterias();
 
-            const editoriasExtra = [
-                { name: "Home", url: "https://extra.globo.com/" },
-                { name: "Rio", url: "https://extra.globo.com/rio/" },
-                { name: "Casos de Polícia", url: "https://extra.globo.com/rio/casos-de-policia/" },
-                { name: "Famosos", url: "https://extra.globo.com/famosos/" },
-                { name: "Entretenimento", url: "https://extra.globo.com/entretenimento/" },
-                { name: "Economia", url: "https://extra.globo.com/economia/" },
-                { name: "Esporte", url: "https://extra.globo.com/esporte/" }
-            ];
-
-            editoriasExtra.forEach(editoria => {
-                const editoriaTitle = document.createElement('h2');
-                editoriaTitle.innerHTML = `<a href="${editoria.url}" target="_blank">Mais Lidas - ${editoria.name}</a>`;
-                editoriaTitle.classList.add('editoria-title', 'editoria-title-extra');
-                container.appendChild(editoriaTitle);
-
-                const editoriaContainer = document.createElement('div');
-                editoriaContainer.id = `editoria-${editoria.name.toLowerCase()}`;
-                container.appendChild(editoriaContainer);
-
-                fetchMaisLidasExtra(editoria.url, editoriaContainer.id);
+            // Envia cada matéria capturada para o Google Sheets
+            materias.forEach(materia => {
+                inserirNoGoogleSheets(materia.titulo, materia.link);
             });
-        }
-
-        // Funções de busca para Globo e Extra
-        fetchAllEditoriasGlobo();
-        fetchAllEditoriasExtra();
-
-        // Atualiza as listas a cada 5 minutos
-        setInterval(function() {
-            fetchAllEditoriasGlobo();
-            fetchAllEditoriasExtra();
-        }, 300000); // 5 minutos
+        });
     </script>
 
 </body>
