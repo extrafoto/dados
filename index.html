@@ -6,7 +6,7 @@ document.getElementById('form').addEventListener('submit', async function (e) {
 
     const data = {
         values: [
-            [nome, email]  // Dados do formulário capturados
+            [nome, email]  // Dados capturados do formulário
         ]
     };
 
@@ -25,7 +25,7 @@ document.getElementById('form').addEventListener('submit', async function (e) {
             alert('Dados enviados com sucesso!');
         } else {
             console.error('Erro ao enviar os dados:', result);
-            alert('Erro ao enviar os dados: ' + JSON.stringify(result)); // Exibe o erro completo no alerta
+            alert('Erro ao enviar os dados: ' + JSON.stringify(result));  // Exibir o erro completo no alerta
         }
     } catch (error) {
         console.error('Erro ao conectar com o Google Sheets:', error);
