@@ -62,22 +62,36 @@
         }
 
         // Função para inicializar o cliente e configurar o OAuth 2.0
-        function initClient() {
-            gapi.client.init({
-                apiKey: API_KEY,
-                clientId: CLIENT_ID,
-                discoveryDocs: DISCOVERY_DOCS,
-                scope: SCOPES
-            }).then(() => {
-                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+       // Função para enviar os dados para o Google Sheets
+function sendToGoogleSheets(event) {
+    event.preventDefault();
+    
+    const nome = document.getElementById('nome').value;
+    const email = document.getElementById('email').value;
 
-                // Verifica se o usuário está logado
-                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    const values = [
+        [nome, email]
+    ];
 
-                // Vincula o botão de login
-                document.getElementById('form').addEventListener('submit', handleAuthClick);
-            });
-        }
+    const params = {
+        spreadsheetId: '1LNiJ70U5YgCem9-ju71M6_NDCfEoSt0PaN7FslviT68', // Seu Spreadsheet ID
+        range: 'Sheet1!A:B', // Intervalo na planilha
+        valueInputOption: 'USER_ENTERED'
+    };
+
+    const valueRangeBody = {
+        "values": values
+    };
+
+    gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody).then((response) => {
+        console.log('Resposta do Google Sheets:', response);
+        alert('Dados enviados com sucesso para o Google Sheets!');
+    }, (err) => {
+        console.error('Erro ao enviar para o Google Sheets:', err);
+        alert('Erro ao enviar para o Google Sheets: ' + JSON.stringify(err));  // Exibir erro completo no alerta
+    });
+}
+
 
         // Função para gerenciar o status de login
         function updateSigninStatus(isSignedIn) {
