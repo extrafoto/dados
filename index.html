@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário com OAuth - Google Sheets</title>
+    <!-- Carrega a API do Google -->
     <script src="https://apis.google.com/js/api.js"></script>
     <style>
         body {
@@ -51,62 +52,49 @@
     </form>
 
     <script>
-        let CLIENT_ID = '19755273624-3qu7v5ultqo3oqc1o83ils1v4cg8go30.apps.googleusercontent.com'; // Seu Client ID
-        let API_KEY = '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'; // Sua API Key
+        let CLIENT_ID = '19755273624-3qu7v5ultqo3oqc1o83ils1v4cg8go30.apps.googleusercontent.com'; // Substitua pelo seu Client ID
+        let API_KEY = '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'; // Substitua pela sua Key
         let DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
         let SCOPES = "https://www.googleapis.com/auth/spreadsheets";
 
-        // Função para carregar a API e fazer a autenticação OAuth
+        // Carrega a API e inicializa o cliente OAuth
         function handleClientLoad() {
             gapi.load('client:auth2', initClient);
         }
 
-        // Função para inicializar o cliente e configurar o OAuth 2.0
-       // Função para enviar os dados para o Google Sheets
-function sendToGoogleSheets(event) {
-    event.preventDefault();
-    
-    const nome = document.getElementById('nome').value;
-    const email = document.getElementById('email').value;
+        // Inicializa o cliente e configura o OAuth 2.0
+        function initClient() {
+            gapi.client.init({
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                discoveryDocs: DISCOVERY_DOCS,
+                scope: SCOPES
+            }).then(() => {
+                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
-    const values = [
-        [nome, email]
-    ];
+                // Verifica se o usuário já está logado
+                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
 
-    const params = {
-        spreadsheetId: '1LNiJ70U5YgCem9-ju71M6_NDCfEoSt0PaN7FslviT68', // Seu Spreadsheet ID
-        range: 'Sheet1!A:B', // Intervalo na planilha
-        valueInputOption: 'USER_ENTERED'
-    };
+                // Vincula o envio do formulário
+                document.getElementById('form').addEventListener('submit', handleAuthClick);
+            });
+        }
 
-    const valueRangeBody = {
-        "values": values
-    };
-
-    gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody).then((response) => {
-        console.log('Resposta do Google Sheets:', response);
-        alert('Dados enviados com sucesso para o Google Sheets!');
-    }, (err) => {
-        console.error('Erro ao enviar para o Google Sheets:', err);
-        alert('Erro ao enviar para o Google Sheets: ' + JSON.stringify(err));  // Exibir erro completo no alerta
-    });
-}
-
-
-        // Função para gerenciar o status de login
+        // Atualiza o status de login
         function updateSigninStatus(isSignedIn) {
             if (isSignedIn) {
+                // Se estiver logado, adiciona a função de envio ao formulário
                 document.getElementById('form').addEventListener('submit', sendToGoogleSheets);
             }
         }
 
-        // Função para fazer login com OAuth 2.0
+        // Solicita login via OAuth 2.0
         function handleAuthClick(event) {
             event.preventDefault();
             gapi.auth2.getAuthInstance().signIn();
         }
 
-        // Função para enviar os dados para o Google Sheets
+        // Envia os dados para o Google Sheets
         function sendToGoogleSheets(event) {
             event.preventDefault();
             
@@ -118,8 +106,8 @@ function sendToGoogleSheets(event) {
             ];
 
             const params = {
-                spreadsheetId: '1LNiJ70U5YgCem9-ju71M6_NDCfEoSt0PaN7FslviT68',
-                range: 'Sheet1!A:B',
+                spreadsheetId: '1LNiJ70U5YgCem9-ju71M6_NDCfEoSt0PaN7FslviT68', // ID da planilha
+                range: 'Sheet1!A:B', // Intervalo na planilha
                 valueInputOption: 'USER_ENTERED'
             };
 
@@ -128,10 +116,11 @@ function sendToGoogleSheets(event) {
             };
 
             gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody).then((response) => {
-                console.log(response);
+                console.log('Resposta do Google Sheets:', response);
                 alert('Dados enviados com sucesso para o Google Sheets!');
             }, (err) => {
                 console.error('Erro ao enviar para o Google Sheets:', err);
+                alert('Erro ao enviar para o Google Sheets: ' + JSON.stringify(err));
             });
         }
 
