@@ -68,6 +68,9 @@
 
         <h2>Imagem</h2>
         <img id="newsImage-globo" src="" alt="Imagem da notícia">
+
+        <!-- Botão para compartilhar -->
+        <button type="button" onclick="shareOnWhatsApp('globo')">Compartilhar no WhatsApp</button>
     </div>
 
     <!-- Campo para inserir o link do Extra -->
@@ -88,6 +91,9 @@
 
         <h2>Imagem</h2>
         <img id="newsImage-extra" src="" alt="Imagem da notícia">
+
+        <!-- Botão para compartilhar -->
+        <button type="button" onclick="shareOnWhatsApp('extra')">Compartilhar no WhatsApp</button>
     </div>
 
     <!-- Botões para ações -->
@@ -176,6 +182,52 @@
                 console.error('Erro ao capturar o conteúdo do Extra:', error);
                 alert('Erro ao capturar o conteúdo. Verifique o link.');
             }
+        }
+
+        async function shareOnWhatsApp(source) {
+            let title = '';
+            let description = '';
+            let articleUrl = '';
+
+            if (source === 'globo') {
+                title = document.getElementById('title-globo').value;
+                description = document.getElementById('description-globo').value;
+                articleUrl = document.getElementById('globoUrl').value;
+            } else if (source === 'extra') {
+                title = document.getElementById('title-extra').value;
+                description = document.getElementById('description-extra').value;
+                articleUrl = document.getElementById('extraUrl').value;
+            }
+
+            const shortUrl = await encurtarUrl(articleUrl);
+
+            const mensagem = `*${title.toUpperCase()}*\n\n${description}\n\n➡️ Leia aqui: ${shortUrl}`;
+
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
+
+            window.open(whatsappUrl, '_blank');
+
+            document.getElementById('clearButton').classList.remove('hidden');
+        }
+
+        async function encurtarUrl(longUrl) {
+            const apiUrl = 'https://api.tinyurl.com/create';
+            const apiKey = 'pJtDisay712pqvikxYaZRxjOXnycECCMgdk6EcnGENujgYWSy6BBQP6NaFLU';
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    url: longUrl,
+                    domain: 'tiny.one'
+                })
+            });
+
+            const data = await response.json();
+            return data.data.tiny_url;
         }
 
         function clearForm() {
