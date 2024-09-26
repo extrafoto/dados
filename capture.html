@@ -19,6 +19,9 @@
     <h2>Imagem:</h2>
     <img id="capturedImage" src="" alt="Imagem da notícia">
 
+    <h2>URL Encurtada:</h2>
+    <p id="capturedUrl"></p>
+
     <button type="button" onclick="window.location.href='index.html'">Retornar à Captura</button>
     <button type="button" onclick="clearCapture()">Limpar</button>
 
@@ -27,11 +30,18 @@
         document.getElementById('capturedTitle').textContent = localStorage.getItem('title');
         document.getElementById('capturedDescription').textContent = localStorage.getItem('description');
         const imageUrl = localStorage.getItem('imageUrl');
+        const shortUrl = localStorage.getItem('shortUrl');
+
         if (imageUrl) {
             document.getElementById('capturedImage').src = imageUrl;
             document.getElementById('capturedImage').style.display = 'block';
         } else {
             document.getElementById('capturedImage').style.display = 'none';
+        }
+
+        // Exibir a URL encurtada
+        if (shortUrl) {
+            document.getElementById('capturedUrl').textContent = shortUrl;
         }
 
         // Limpar o conteúdo capturado
