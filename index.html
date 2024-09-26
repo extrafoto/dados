@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Captura de Conteúdo</title>
+    <title>Captura de Conteúdo e Compartilhamento</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,21 +11,187 @@
     <h1>Capturar Conteúdo de Matérias</h1>
 
     <!-- Campo para capturar O Globo -->
-    <div id="step-1">
+    <div id="globo-section">
         <h2>O Globo</h2>
         <input type="text" id="globoUrl" placeholder="Cole o link da matéria do Globo aqui" required>
-        <button type="button" onclick="fetchGloboContent()">Capturar Conteúdo do Globo</button>
+        <button type="button" onclick="fetchContentGlobo()">Capturar Conteúdo do Globo</button>
     </div>
 
     <!-- Campo para capturar Extra -->
-    <div id="step-2">
+    <div id="extra-section">
         <h2>Extra</h2>
         <input type="text" id="extraUrl" placeholder="Cole o link da matéria do Extra aqui" required>
-        <button type="button" onclick="fetchExtraContent()">Capturar Conteúdo do Extra</button>
+        <button type="button" onclick="fetchContentExtra()">Capturar Conteúdo do Extra</button>
     </div>
 
-    <!-- Captura do conteúdo exibida em página separada -->
-    <script src="js/globo.js"></script>
-    <script src="js/extra.js"></script>
+    <!-- Exibir o conteúdo capturado -->
+    <div id="content-container-globo" class="hidden">
+        <h2>Conteúdo Capturado do Globo</h2>
+        <h3>Título:</h3>
+        <textarea id="globoTitle" rows="2"></textarea>
+
+        <h3>Descrição:</h3>
+        <textarea id="globoDescription" rows="3"></textarea>
+
+        <h3>Imagem:</h3>
+        <img id="globoImage" src="" alt="Imagem da notícia">
+
+        <!-- Exibir link encurtado -->
+        <h3>URL Encurtada:</h3>
+        <p id="globoShortUrl"></p>
+    </div>
+
+    <div id="content-container-extra" class="hidden">
+        <h2>Conteúdo Capturado do Extra</h2>
+        <h3>Título:</h3>
+        <textarea id="extraTitle" rows="2"></textarea>
+
+        <h3>Descrição:</h3>
+        <textarea id="extraDescription" rows="3"></textarea>
+
+        <h3>Imagem:</h3>
+        <img id="extraImage" src="" alt="Imagem da notícia">
+
+        <!-- Exibir link encurtado -->
+        <h3>URL Encurtada:</h3>
+        <p id="extraShortUrl"></p>
+    </div>
+
+    <!-- Botões para compartilhar e limpar -->
+    <button type="button" class="hidden" id="clearButton" onclick="clearForm()">Limpar</button>
+
+    <script>
+        async function fetchContentGlobo() {
+            const articleUrl = document.getElementById('globoUrl').value;
+
+            try {
+                const proxyUrl = 'https://api.allorigins.win/raw?url=';
+                const urlWithTimestamp = `${proxyUrl}${encodeURIComponent(articleUrl)}?timestamp=${new Date().getTime()}`;
+
+                const response = await fetch(urlWithTimestamp);
+                const htmlText = await response.text();
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+
+                // Captura de título, descrição e imagem
+                const titleElement = doc.querySelector('meta[property="og:title"]');
+                const title = titleElement ? titleElement.getAttribute('content') : 'Título não encontrado';
+
+                const descriptionElement = doc.querySelector('meta[property="og:description"]');
+                const description = descriptionElement ? descriptionElement.getAttribute('content') : 'Descrição não encontrada';
+
+                const imageElement = doc.querySelector('meta[property="og:image"]');
+                const imageUrl = imageElement ? imageElement.getAttribute('content') : null;
+
+                // Encurtar a URL
+                const shortUrl = await encurtarUrl(articleUrl);
+
+                // Exibir conteúdo capturado
+                document.getElementById('globoTitle').value = title;
+                document.getElementById('globoDescription').value = description;
+
+                if (imageUrl) {
+                    document.getElementById('globoImage').src = imageUrl;
+                    document.getElementById('globoImage').style.display = 'block';
+                } else {
+                    document.getElementById('globoImage').style.display = 'none';
+                }
+
+                document.getElementById('globoShortUrl').textContent = shortUrl;
+                document.getElementById('content-container-globo').classList.remove('hidden');
+                document.getElementById('clearButton').classList.remove('hidden');
+            } catch (error) {
+                console.error('Erro ao capturar o conteúdo do Globo:', error);
+                alert('Erro ao capturar o conteúdo. Verifique o link.');
+            }
+        }
+
+        async function fetchContentExtra() {
+            const articleUrl = document.getElementById('extraUrl').value;
+
+            try {
+                const proxyUrl = 'https://api.allorigins.win/raw?url=';
+                const urlWithTimestamp = `${proxyUrl}${encodeURIComponent(articleUrl)}?timestamp=${new Date().getTime()}`;
+
+                const response = await fetch(urlWithTimestamp);
+                const htmlText = await response.text();
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+
+                // Captura de título, descrição e imagem
+                const titleElement = doc.querySelector('h1.content-head__title');
+                const title = titleElement ? titleElement.textContent : 'Título não encontrado';
+
+                const subtitleElement = doc.querySelector('h2.content-head__subtitle');
+                const description = subtitleElement ? subtitleElement.textContent : 'Subtítulo não encontrado';
+
+                const imageElement = doc.querySelector('meta[property="og:image"]');
+                const imageUrl = imageElement ? imageElement.getAttribute('content') : null;
+
+                // Encurtar a URL
+                const shortUrl = await encurtarUrl(articleUrl);
+
+                // Exibir conteúdo capturado
+                document.getElementById('extraTitle').value = title;
+                document.getElementById('extraDescription').value = description;
+
+                if (imageUrl) {
+                    document.getElementById('extraImage').src = imageUrl;
+                    document.getElementById('extraImage').style.display = 'block';
+                } else {
+                    document.getElementById('extraImage').style.display = 'none';
+                }
+
+                document.getElementById('extraShortUrl').textContent = shortUrl;
+                document.getElementById('content-container-extra').classList.remove('hidden');
+                document.getElementById('clearButton').classList.remove('hidden');
+            } catch (error) {
+                console.error('Erro ao capturar o conteúdo do Extra:', error);
+                alert('Erro ao capturar o conteúdo. Verifique o link.');
+            }
+        }
+
+        async function encurtarUrl(longUrl) {
+            const apiUrl = 'https://api.tinyurl.com/create';
+            const apiKey = 'pJtDisay712pqvikxYaZRxjOXnycECCMgdk6EcnGENujgYWSy6BBQP6NaFLU';
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    url: longUrl,
+                    domain: 'tiny.one'
+                })
+            });
+
+            const data = await response.json();
+            return data.data.tiny_url;
+        }
+
+        function clearForm() {
+            document.getElementById('globoUrl').value = '';
+            document.getElementById('extraUrl').value = '';
+            document.getElementById('globoTitle').value = '';
+            document.getElementById('globoDescription').value = '';
+            document.getElementById('extraTitle').value = '';
+            document.getElementById('extraDescription').value = '';
+            document.getElementById('globoImage').src = '';
+            document.getElementById('extraImage').src = '';
+            document.getElementById('globoImage').style.display = 'none';
+            document.getElementById('extraImage').style.display = 'none';
+            document.getElementById('globoShortUrl').textContent = '';
+            document.getElementById('extraShortUrl').textContent = '';
+
+            document.getElementById('content-container-globo').classList.add('hidden');
+            document.getElementById('content-container-extra').classList.add('hidden');
+            document.getElementById('clearButton').classList.add('hidden');
+        }
+    </script>
+
 </body>
 </html>
