@@ -11,10 +11,14 @@ async function fetchExtraContent() {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, 'text/html');
 
-        // Capturar o título e a descrição do Extra
-        const title = doc.querySelector('h1.content-head__title').textContent.trim();
-        const description = doc.querySelector('h2.content-head__subtitle').textContent.trim();
-        const imageUrl = doc.querySelector('meta[property="og:image"]').getAttribute('content');
+        // Verificar se os seletores existem antes de tentar acessá-los
+        const titleElement = doc.querySelector('h1.content-head__title');
+        const subtitleElement = doc.querySelector('h2.content-head__subtitle');
+        const imageElement = doc.querySelector('meta[property="og:image"]');
+
+        const title = titleElement ? titleElement.textContent.trim() : 'Título não encontrado';
+        const description = subtitleElement ? subtitleElement.textContent.trim() : 'Subtítulo não encontrado';
+        const imageUrl = imageElement ? imageElement.getAttribute('content') : null;
 
         // Encurtar a URL com a API do TinyURL
         const shortUrl = await encurtarUrl(articleUrl);
