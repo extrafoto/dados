@@ -3,19 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Captura Globo</title>
-     <link rel="stylesheet" href="css/styles.css"> <!-- Certifique-se de que o caminho está correto -->
+    <title>Encurtador de Links e Compartilhamento</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Captura de Dados - Globo</h1>
-        <form id="globoForm">
-            <input type="text" id="globoData" placeholder="Insira os dados para capturar..." required>
-            <button type="submit" class="btn">Capturar Dados</button>
-        </form>
-        <div id="result"></div>
+
+    <h1>Encurtador de Links e Compartilhamento</h1>
+
+    <!-- Passo 1: Campo para inserir o link -->
+    <div id="step-1">
+        <input type="text" id="articleUrl" placeholder="Cole o link da matéria aqui" required>
+        <button type="button" onclick="fetchContent()">Capturar Conteúdo</button>
     </div>
 
-    <script src="js/globo.js"></script>
+    <!-- Conteúdo capturado será mostrado aqui -->
+    <div id="content-container" class="hidden">
+        <h2>Título</h2>
+        <textarea id="title" rows="2"></textarea>
+
+        <h2>Descrição</h2>
+        <textarea id="description" rows="3"></textarea>
+
+        <h2>Imagem</h2>
+        <img id="newsImage" src="" alt="Imagem da notícia">
+
+        <!-- Passo 2: Botão para compartilhar -->
+        <button type="button" onclick="shareOnWhatsApp()">Compartilhar no WhatsApp</button>
+        <button type="button" class="hidden" id="clearButton" onclick="clearForm()">Limpar</button>
+    </div>
+
+    <script src="globo.js"></script>
+
 </body>
 </html>
