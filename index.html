@@ -10,12 +10,22 @@
 
     <h1>Capturar Conteúdo de Matérias</h1>
 
+    <!-- Campo para capturar O Globo -->
     <div id="step-1">
-        <input type="text" id="articleUrl" placeholder="Cole o link da matéria aqui" required>
-        <button type="button" onclick="fetchContent()">Capturar Conteúdo</button>
+        <h2>O Globo</h2>
+        <input type="text" id="globoUrl" placeholder="Cole o link da matéria do Globo aqui" required>
+        <button type="button" onclick="fetchGloboContent()">Capturar Conteúdo do Globo</button>
+    </div>
+
+    <!-- Campo para capturar Extra -->
+    <div id="step-2">
+        <h2>Extra</h2>
+        <input type="text" id="extraUrl" placeholder="Cole o link da matéria do Extra aqui" required>
+        <button type="button" onclick="fetchExtraContent()">Capturar Conteúdo do Extra</button>
     </div>
 
     <!-- Captura do conteúdo exibida em página separada -->
-    <script src="js/capture.js"></script>
+    <script src="js/globo.js"></script>
+    <script src="js/extra.js"></script>
 </body>
 </html>
