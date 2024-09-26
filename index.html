@@ -3,16 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escolha sua Opção</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Compartilhar Matéria pelo WhatsApp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            font-size: 24px;
+            color: #003366;
+        }
+        p {
+            font-size: 18px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #128C7E;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Escolha o site para capturar dados</h1>
-        <div class="options">
-            <a href="globo.html" class="btn">Capturar Globo</a>
-            <a href="extra.html" class="btn">Capturar Extra</a>
-        </div>
+
+    <h1>Compartilhar Matéria pelo WhatsApp</h1>
+
+    <!-- Campo para inserir o link do Globo -->
+    <div id="globo-section">
+        <h2>O Globo</h2>
+        <input type="text" id="globoUrl" placeholder="Cole o link da matéria do Globo aqui" required>
+        <button type="button" onclick="fetchContentGlobo()">Capturar Conteúdo do Globo</button>
     </div>
+
+    <!-- Campo para inserir o link do Extra -->
+    <div id="extra-section">
+        <h2>Extra</h2>
+        <input type="text" id="extraUrl" placeholder="Cole o link da matéria do Extra aqui" required>
+        <button type="button" onclick="fetchContentExtra()">Capturar Conteúdo do Extra</button>
+    </div>
+
+    <!-- Conteúdo capturado será mostrado aqui -->
+    <div id="content-container" class="hidden">
+        <h2>Título</h2>
+        <textarea id="title" rows="2"></textarea>
+
+        <h2>Descrição</h2>
+        <textarea id="description" rows="3"></textarea>
+
+        <h2>Imagem</h2>
+        <img id="newsImage" src="" alt="Imagem da notícia">
+
+        <!-- Botão para compartilhar -->
+        <button type="button" onclick="shareOnWhatsApp()">Compartilhar no WhatsApp</button>
+        <button type="button" class="hidden" id="clearButton" onclick="clearForm()">Limpar</button>
+    </div>
+
+    <script>
+        async function fetchContentGlobo() {
+            const articleUrl = document.getElementById('globoUrl').value;
+            document.getElementById('content-container').classList.add('hidden');
+            document.getElementById('clearButton').classList.add('hidden');
+
+            try {
+                const proxyUrl = 'https://api.allorigins.win/raw?url=';
+                const urlWithTimestamp = `${proxyUrl}${encodeURIComponent(articleUrl)}?timestamp=${new Date().getTime()}`;
+
+                const response = await fetch(urlWithTimestamp);
+                const htmlText = await response.text();
+                
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+
+                const titleElement = doc.querySelector('meta[property="og:title"]');
+                const title = titleElement ? titleElement.getAttribute('content') : 'Título não encontrado';
+
+                const descriptionMeta = doc.querySelector('meta[property="og:description"]');
+                const description = descriptionMeta ? descriptionMeta.getAttribute('content') : 'Descrição não encontrada';
+
+                const imageElement = doc.querySelector('meta[property="og:image"]');
+                const imageUrl = imageElement ? imageElement.getAttribute('content') : null;
+
+                document.getElementById('title').value = title;
+                document.getElementById('description').value = description;
+
+                if (imageUrl) {
+                    document.getElementById('newsImage').src = imageUrl;
+                    document.getElementById('newsImage').style.display = 'block';
+                } else {
+                    document.getElementById('newsImage').style.display = 'none';
+                }
+
+                document.getElementById('content-container').classList.remove('hidden');
+            } catch (error) {
+                console.error('Erro ao capturar o conteúdo do Globo:', error);
+                alert('Erro ao capturar o conteúdo. Verifique o link.');
+            }
+        }
+
+        async function fetchContentExtra() {
+            const articleUrl = document.getElementById('extraUrl').value;
+            document.getElementById('content-container').classList.add('hidden');
+            document.getElementById('clearButton').classList.add('hidden');
+
+            try {
+                const response = await fetch(articleUrl);
+                const htmlText = await response.text();
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+
+                const titleElement = doc.querySelector('h1.content-head__title');
+                const title = titleElement ? titleElement.textContent : 'Título não encontrado';
+
+                const subtitleElement = doc.querySelector('h2.content-head__subtitle');
+                const description = subtitleElement ? subtitleElement.textContent : 'Subtítulo não encontrado';
+
+                const imageElement = doc.querySelector('meta[property="og:image"]');
+                const imageUrl = imageElement ? imageElement.getAttribute('content') : null;
+
+                document.getElementById('title').value = title;
+                document.getElementById('description').value = description;
+
+                if (imageUrl) {
+                    document.getElementById('newsImage').src = imageUrl;
+                    document.getElementById('newsImage').style.display = 'block';
+                } else {
+                    document.getElementById('newsImage').style.display = 'none';
+                }
+
+                document.getElementById('content-container').classList.remove('hidden');
+            } catch (error) {
+                console.error('Erro ao capturar o conteúdo do Extra:', error);
+                alert('Erro ao capturar o conteúdo. Verifique o link.');
+            }
+        }
+
+        async function shareOnWhatsApp() {
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const articleUrl = document.getElementById('globoUrl').value || document.getElementById('extraUrl').value;
+
+            const shortUrl = await encurtarUrl(articleUrl);
+
+            const mensagem = `*${title.toUpperCase()}*\n\n${description}\n\n➡️ Leia aqui: ${shortUrl}`;
+
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
+
+            window.open(whatsappUrl, '_blank');
+
+            document.getElementById('clearButton').classList.remove('hidden');
+        }
+
+        async function encurtarUrl(longUrl) {
+            const apiUrl = 'https://api.tinyurl.com/create';
+            const apiKey = 'pJtDisay712pqvikxYaZRxjOXnycECCMgdk6EcnGENujgYWSy6BBQP6NaFLU';
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    url: longUrl,
+                    domain: 'tiny.one'
+                })
+            });
+
+            const data = await response.json();
+            return data.data.tiny_url;
+        }
+
+        function clearForm() {
+            document.getElementById('globoUrl').value = '';
+            document.getElementById('extraUrl').value = '';
+            document.getElementById('title').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('newsImage').src = '';
+            document.getElementById('newsImage').style.display = 'none';
+
+            document.getElementById('content-container').classList.add('hidden');
+            document.getElementById('clearButton').classList.add('hidden');
+        }
+    </script>
+
 </body>
 </html>
