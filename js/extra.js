@@ -11,13 +11,24 @@ async function fetchExtraContent() {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, 'text/html');
 
-        // Verificar se os seletores existem antes de tentar acessá-los
-        const titleElement = doc.querySelector('h1.content-head__title');
-        const subtitleElement = doc.querySelector('h2.content-head__subtitle');
-        const imageElement = doc.querySelector('meta[property="og:image"]');
+        // Tentando diferentes seletores para capturar o título
+        let titleElement = doc.querySelector('h1.content-head__title'); // seletor padrão
+        if (!titleElement) {
+            titleElement = doc.querySelector('meta[property="og:title"]'); // fallback para meta tag
+        }
+        
+        const title = titleElement ? (titleElement.textContent || titleElement.getAttribute('content')).trim() : 'Título não encontrado';
 
-        const title = titleElement ? titleElement.textContent.trim() : 'Título não encontrado';
-        const description = subtitleElement ? subtitleElement.textContent.trim() : 'Subtítulo não encontrado';
+        // Tentando diferentes seletores para capturar o subtítulo
+        let subtitleElement = doc.querySelector('h2.content-head__subtitle'); // seletor padrão
+        if (!subtitleElement) {
+            subtitleElement = doc.querySelector('meta[property="og:description"]'); // fallback para meta tag
+        }
+        
+        const description = subtitleElement ? (subtitleElement.textContent || subtitleElement.getAttribute('content')).trim() : 'Subtítulo não encontrado';
+
+        // Capturar a imagem (og:image)
+        const imageElement = doc.querySelector('meta[property="og:image"]');
         const imageUrl = imageElement ? imageElement.getAttribute('content') : null;
 
         // Encurtar a URL com a API do TinyURL
