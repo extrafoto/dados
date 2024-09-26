@@ -44,6 +44,15 @@
         .hidden {
             display: none;
         }
+        .clicked {
+            background-color: #33dbff !important;
+            color: white;
+        }
+        .message {
+            color: green;
+            font-weight: bold;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -55,6 +64,7 @@
         <h2>O Globo</h2>
         <input type="text" id="globoUrl" placeholder="Cole o link da matéria do Globo aqui" required>
         <button type="button" onclick="fetchContentGlobo()">Capturar Conteúdo do Globo</button>
+        <div id="messageGlobo" class="message hidden">Botão clicado!</div>
     </div>
 
     <!-- Conteúdo capturado do Globo -->
@@ -70,7 +80,11 @@
         <img id="newsImage-globo" src="" alt="Imagem da notícia">
 
         <!-- Botão para compartilhar no Globo -->
-        <button type="button" onclick="shareOnWhatsApp('globo')">Compartilhar no WhatsApp</button>
+        <button type="button" id="shareButtonGlobo" onclick="shareOnWhatsApp('globo')">Compartilhar no WhatsApp</button>
+        <div id="messageShareGlobo" class="message hidden">Botão Compartilhar clicado!</div>
+        
+        <button type="button" id="copyButtonGlobo" onclick="generateCopyText('globo')">Gerar texto para copiar</button>
+        <div id="messageCopyGlobo" class="message hidden">Botão Gerar Texto clicado!</div>
     </div>
 
     <!-- Campo para inserir o link do Extra -->
@@ -78,6 +92,7 @@
         <h2>Extra</h2>
         <input type="text" id="extraUrl" placeholder="Cole o link da matéria do Extra aqui" required>
         <button type="button" onclick="fetchContentExtra()">Capturar Conteúdo do Extra</button>
+        <div id="messageExtra" class="message hidden">Botão clicado!</div>
     </div>
 
     <!-- Conteúdo capturado do Extra -->
@@ -93,17 +108,35 @@
         <img id="newsImage-extra" src="" alt="Imagem da notícia">
 
         <!-- Botão para compartilhar no Extra -->
-        <button type="button" onclick="shareOnWhatsApp('extra')">Compartilhar no WhatsApp</button>
+        <button type="button" id="shareButtonExtra" onclick="shareOnWhatsApp('extra')">Compartilhar no WhatsApp</button>
+        <div id="messageShareExtra" class="message hidden">Botão Compartilhar clicado!</div>
+        
+        <button type="button" id="copyButtonExtra" onclick="generateCopyText('extra')">Gerar texto para copiar</button>
+        <div id="messageCopyExtra" class="message hidden">Botão Gerar Texto clicado!</div>
+    </div>
+
+    <!-- Área para exibir o texto formatado para copiar -->
+    <div id="copy-text-section" class="hidden">
+        <h3>Texto para copiar</h3>
+        <textarea id="copyTextArea" rows="6"></textarea>
     </div>
 
     <!-- Botões para ações -->
     <div>
         <button type="button" class="hidden" id="clearButton" onclick="clearForm()">Limpar</button>
+        <div id="messageClear" class="message hidden">Botão Limpar clicado!</div>
         <button type="button" onclick="scrollToTop()">Voltar ao topo</button>
+        <div id="messageTop" class="message hidden">Botão Voltar ao Topo clicado!</div>
     </div>
 
     <script>
+        function buttonClicked(buttonId, messageId) {
+            document.getElementById(buttonId).classList.add('clicked');
+            document.getElementById(messageId).classList.remove('hidden');
+        }
+
         async function fetchContentGlobo() {
+            buttonClicked('globo-section', 'messageGlobo');
             const articleUrl = document.getElementById('globoUrl').value;
             document.getElementById('globo-content').classList.add('hidden');
             document.getElementById('clearButton').classList.add('hidden');
@@ -146,6 +179,7 @@
         }
 
         async function fetchContentExtra() {
+            buttonClicked('extra-section', 'messageExtra');
             const articleUrl = document.getElementById('extraUrl').value;
             document.getElementById('extra-content').classList.add('hidden');
             document.getElementById('clearButton').classList.add('hidden');
@@ -185,6 +219,11 @@
         }
 
         async function shareOnWhatsApp(source) {
+            if (source === 'globo') {
+                buttonClicked('shareButtonGlobo', 'messageShareGlobo');
+            } else {
+                buttonClicked('shareButtonExtra', 'messageShareExtra');
+            }
             let title = '';
             let description = '';
             let articleUrl = '';
@@ -210,6 +249,34 @@
             document.getElementById('clearButton').classList.remove('hidden');
         }
 
+        async function generateCopyText(source) {
+            if (source === 'globo') {
+                buttonClicked('copyButtonGlobo', 'messageCopyGlobo');
+            } else {
+                buttonClicked('copyButtonExtra', 'messageCopyExtra');
+            }
+            let title = '';
+            let description = '';
+            let articleUrl = '';
+
+            if (source === 'globo') {
+                title = document.getElementById('title-globo').value;
+                description = document.getElementById('description-globo').value;
+                articleUrl = document.getElementById('globoUrl').value;
+            } else if (source === 'extra') {
+                title = document.getElementById('title-extra').value;
+                description = document.getElementById('description-extra').value;
+                articleUrl = document.getElementById('extraUrl').value;
+            }
+
+            const shortUrl = await encurtarUrl(articleUrl);
+
+            const copyText = `*${title.toUpperCase()}*\n\n${description}\n\n➡️ Leia aqui: ${shortUrl}`;
+
+            document.getElementById('copyTextArea').value = copyText;
+            document.getElementById('copy-text-section').classList.remove('hidden');
+        }
+
         async function encurtarUrl(longUrl) {
             const apiUrl = 'https://api.tinyurl.com/create';
             const apiKey = 'pJtDisay712pqvikxYaZRxjOXnycECCMgdk6EcnGENujgYWSy6BBQP6NaFLU';
@@ -231,6 +298,7 @@
         }
 
         function clearForm() {
+            buttonClicked('clearButton', 'messageClear');
             document.getElementById('globoUrl').value = '';
             document.getElementById('extraUrl').value = '';
             document.getElementById('title-globo').value = '';
@@ -242,10 +310,12 @@
 
             document.getElementById('globo-content').classList.add('hidden');
             document.getElementById('extra-content').classList.add('hidden');
+            document.getElementById('copy-text-section').classList.add('hidden');
             document.getElementById('clearButton').classList.add('hidden');
         }
 
         function scrollToTop() {
+            buttonClicked('scrollTopButton', 'messageTop');
             window.scrollTo(0, 0);
         }
     </script>
