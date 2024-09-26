@@ -1,5 +1,7 @@
-async function fetchExtraContent() {
+async function fetchContentExtra() {
     const articleUrl = document.getElementById('extraUrl').value;
+    document.getElementById('content-container').classList.add('hidden');
+    document.getElementById('clearButton').classList.add('hidden');
 
     try {
         const proxyUrl = 'https://api.allorigins.win/raw?url=';
@@ -11,19 +13,26 @@ async function fetchExtraContent() {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, 'text/html');
 
-        // Capturar o título e a descrição do Extra
-        const title = doc.querySelector('h1.content-head__title').textContent.trim();
-        const description = doc.querySelector('h2.content-head__subtitle').textContent.trim();
-        const imageUrl = doc.querySelector('meta[property="og:image"]').getAttribute('content');
+        const titleElement = doc.querySelector('h1.content-head__title');
+        const title = titleElement ? titleElement.textContent : 'Título não encontrado';
 
-        // Salvar o conteúdo no localStorage
-        localStorage.setItem('title', title);
-        localStorage.setItem('description', description);
-        localStorage.setItem('imageUrl', imageUrl);
+        const subtitleElement = doc.querySelector('h2.content-head__subtitle');
+        const description = subtitleElement ? subtitleElement.textContent : 'Subtítulo não encontrado';
 
-        // Redirecionar para a página de exibição do conteúdo
-        window.location.href = 'capture.html';
+        const imageElement = doc.querySelector('meta[property="og:image"]');
+        const imageUrl = imageElement ? imageElement.getAttribute('content') : null;
 
+        document.getElementById('title').value = title;
+        document.getElementById('description').value = description;
+
+        if (imageUrl) {
+            document.getElementById('newsImage').src = imageUrl;
+            document.getElementById('newsImage').style.display = 'block';
+        } else {
+            document.getElementById('newsImage').style.display = 'none';
+        }
+
+        document.getElementById('content-container').classList.remove('hidden');
     } catch (error) {
         console.error('Erro ao capturar o conteúdo do Extra:', error);
         alert('Erro ao capturar o conteúdo. Verifique o link.');
