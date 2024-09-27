@@ -45,7 +45,7 @@
             display: none;
         }
         .clicked {
-            background-color: #33dbff !important;
+            background-color: #FF5733 !important;
             color: white;
         }
         .message {
@@ -152,10 +152,10 @@
                 const doc = parser.parseFromString(htmlText, 'text/html');
 
                 const titleElement = doc.querySelector('meta[property="og:title"]');
-                const title = titleElement ? titleElement.getAttribute('content') : 'Título não encontrado';
+                const title = titleElement ? titleElement.getAttribute('content').trim() : 'Título não encontrado';  // Usando trim()
 
                 const descriptionMeta = doc.querySelector('meta[property="og:description"]');
-                const description = descriptionMeta ? descriptionMeta.getAttribute('content') : 'Descrição não encontrada';
+                const description = descriptionMeta ? descriptionMeta.getAttribute('content').trim() : 'Descrição não encontrada';  // Usando trim()
 
                 const imageElement = doc.querySelector('meta[property="og:image"]');
                 const imageUrl = imageElement ? imageElement.getAttribute('content') : null;
@@ -192,10 +192,10 @@
                 const doc = parser.parseFromString(htmlText, 'text/html');
 
                 const titleElement = doc.querySelector('h1.content-head__title');
-                const title = titleElement ? titleElement.textContent : 'Título não encontrado';
+                const title = titleElement ? titleElement.textContent.trim() : 'Título não encontrado';  // Usando trim()
 
                 const subtitleElement = doc.querySelector('h2.content-head__subtitle');
-                const description = subtitleElement ? subtitleElement.textContent : 'Subtítulo não encontrado';
+                const description = subtitleElement ? subtitleElement.textContent.trim() : 'Subtítulo não encontrado';  // Usando trim()
 
                 const imageElement = doc.querySelector('meta[property="og:image"]');
                 const imageUrl = imageElement ? imageElement.getAttribute('content') : null;
@@ -229,12 +229,12 @@
             let articleUrl = '';
 
             if (source === 'globo') {
-                title = document.getElementById('title-globo').value;
-                description = document.getElementById('description-globo').value;
+                title = document.getElementById('title-globo').value.trim();  // Usando trim()
+                description = document.getElementById('description-globo').value.trim();  // Usando trim()
                 articleUrl = document.getElementById('globoUrl').value;
             } else if (source === 'extra') {
-                title = document.getElementById('title-extra').value;
-                description = document.getElementById('description-extra').value;
+                title = document.getElementById('title-extra').value.trim();  // Usando trim()
+                description = document.getElementById('description-extra').value.trim();  // Usando trim()
                 articleUrl = document.getElementById('extraUrl').value;
             }
 
@@ -260,12 +260,12 @@
             let articleUrl = '';
 
             if (source === 'globo') {
-                title = document.getElementById('title-globo').value;
-                description = document.getElementById('description-globo').value;
+                title = document.getElementById('title-globo').value.trim();  // Usando trim()
+                description = document.getElementById('description-globo').value.trim();  // Usando trim()
                 articleUrl = document.getElementById('globoUrl').value;
             } else if (source === 'extra') {
-                title = document.getElementById('title-extra').value;
-                description = document.getElementById('description-extra').value;
+                title = document.getElementById('title-extra').value.trim();  // Usando trim()
+                description = document.getElementById('description-extra').value.trim();  // Usando trim()
                 articleUrl = document.getElementById('extraUrl').value;
             }
 
