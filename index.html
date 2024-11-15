@@ -3,322 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compartilhar Matéria pelo WhatsApp</title>
+    <title>Serviços Comunitários</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
-        h1 {
-            font-size: 24px;
-            color: #003366;
+
+        /* Cabeçalho */
+        .header {
+            background-color: #003366;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
         }
-        p {
-            font-size: 18px;
+
+        /* Menu de navegação */
+        .navbar {
+            display: flex;
+            justify-content: center;
+            background-color: #002244;
+            padding: 10px;
         }
-        img {
-            max-width: 100%;
-            height: auto;
+
+        .navbar a {
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .navbar a:hover {
+            background-color: #005599;
+        }
+
+        /* Contêiner principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Título principal */
+        .title {
+            text-align: center;
+            font-size: 2em;
+            color: #333;
             margin-top: 20px;
-            border-radius: 10px;
         }
-        input, textarea {
+
+        /* Grid de serviços */
+        .services-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* Card de cada serviço */
+        .service-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 300px;
+            text-align: center;
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .service-card h3 {
+            font-size: 1.5em;
+            color: #003366;
+            padding: 10px;
+        }
+
+        .service-card p {
+            padding: 10px;
+            color: #555;
+        }
+
+        /* Seção de Contato */
+        .contact-form {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form h2 {
+            color: #003366;
+            text-align: center;
+        }
+
+        .contact-form label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #333;
+        }
+
+        .contact-form input, .contact-form textarea {
             width: 100%;
             padding: 10px;
-            margin-top: 10px;
-            font-size: 16px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        button {
-            margin-top: 20px;
+
+        .contact-form button {
+            background-color: #003366;
+            color: #fff;
             padding: 10px 20px;
-            background-color: #25D366;
-            color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            width: 100%;
         }
-        button:hover {
-            background-color: #128C7E;
+
+        .contact-form button:hover {
+            background-color: #005599;
         }
-        .hidden {
-            display: none;
+
+        /* Rodapé */
+        .footer {
+            background-color: #003366;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
         }
-        .clicked {
-            background-color: #FF5733 !important;
-            color: white;
-        }
-        .message {
-            color: green;
-            font-weight: bold;
-            margin-top: 10px;
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .services-grid {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Cabeçalho -->
+    <header class="header">
+        <h1>Compromisso com a Comunidade</h1>
+        <p>Conheça os serviços oferecidos pela nossa associação.</p>
+    </header>
 
-    <h1>Compartilhar Matéria pelo WhatsApp</h1>
+    <!-- Menu de navegação -->
+    <nav class="navbar">
+        <a href="#servicos">Serviços</a>
+        <a href="#contato">Contato</a>
+    </nav>
 
-    <!-- Campo para inserir o link do Globo -->
-    <div id="globo-section">
-        <h2>O Globo</h2>
-        <input type="text" id="globoUrl" placeholder="Cole o link da matéria do Globo aqui" required>
-        <button type="button" onclick="fetchContentGlobo()">Capturar Conteúdo do Globo</button>
-        <div id="messageGlobo" class="message hidden">Botão clicado!</div>
+    <!-- Contêiner principal -->
+    <div class="container">
+        <!-- Título da seção -->
+        <h2 class="title" id="servicos">Aulas e Serviços Comunitários</h2>
+
+        <!-- Grid de serviços -->
+        <div class="services-grid">
+            <!-- Card de Judô -->
+            <div class="service-card">
+                <img src="url_da_imagem_judo.jpg" alt="Aula de Judô">
+                <h3>Aula de Judô</h3>
+                <p>Aprenda técnicas de defesa pessoal e desenvolva disciplina e respeito com nossas aulas de judô.</p>
+            </div>
+
+            <!-- Card de Culinária -->
+            <div class="service-card">
+                <img src="url_da_imagem_culinaria.jpg" alt="Aula de Culinária">
+                <h3>Aula de Culinária</h3>
+                <p>Descubra receitas deliciosas e aprenda a cozinhar com ingredientes acessíveis e técnicas simples.</p>
+            </div>
+
+            <!-- Card de Workshops de Saúde -->
+            <div class="service-card">
+                <img src="url_da_imagem_saude.jpg" alt="Workshop sobre Saúde e Bem-Estar">
+                <h3>Workshop sobre Saúde e Bem-Estar</h3>
+                <p>Participe de nossos workshops que promovem hábitos saudáveis para uma vida melhor.</p>
+            </div>
+
+            <!-- Card de Ioga e Meditação -->
+            <div class="service-card">
+                <img src="url_da_imagem_ioga.jpg" alt="Aula de Ioga e Meditação">
+                <h3>Aula de Ioga e Meditação</h3>
+                <p>Pratique ioga e meditação para relaxar, aliviar o estresse e melhorar o bem-estar mental e físico.</p>
+            </div>
+        </div>
+
+        <!-- Formulário de Contato -->
+        <div class="contact-form" id="contato">
+            <h2>Contato</h2>
+            <form action="mailto:gazeredo@gmail.com" method="post" enctype="text/plain">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Mensagem:</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+
+                <button type="submit">Enviar Mensagem</button>
+            </form>
+        </div>
     </div>
 
-    <!-- Conteúdo capturado do Globo -->
-    <div id="globo-content" class="hidden">
-        <h3>Conteúdo capturado do Globo</h3>
-        <h2>Título</h2>
-        <textarea id="title-globo" rows="2"></textarea>
-
-        <h2>Descrição</h2>
-        <textarea id="description-globo" rows="3"></textarea>
-
-        <h2>Imagem</h2>
-        <img id="newsImage-globo" src="" alt="Imagem da notícia">
-
-        <!-- Botão para compartilhar no Globo -->
-        <button type="button" id="shareButtonGlobo" onclick="shareOnWhatsApp('globo')">Compartilhar no WhatsApp</button>
-        <div id="messageShareGlobo" class="message hidden">Botão Compartilhar clicado!</div>
-        
-        <button type="button" id="copyButtonGlobo" onclick="generateCopyText('globo')">Gerar texto para copiar</button>
-        <div id="messageCopyGlobo" class="message hidden">Botão Gerar Texto clicado!</div>
-    </div>
-
-    <!-- Campo para inserir o link do Extra -->
-    <div id="extra-section">
-        <h2>Extra</h2>
-        <input type="text" id="extraUrl" placeholder="Cole o link da matéria do Extra aqui" required>
-        <button type="button" onclick="fetchContentExtra()">Capturar Conteúdo do Extra</button>
-        <div id="messageExtra" class="message hidden">Botão clicado!</div>
-    </div>
-
-    <!-- Conteúdo capturado do Extra -->
-    <div id="extra-content" class="hidden">
-        <h3>Conteúdo capturado do Extra</h3>
-        <h2>Título</h2>
-        <textarea id="title-extra" rows="2"></textarea>
-
-        <h2>Descrição</h2>
-        <textarea id="description-extra" rows="3"></textarea>
-
-        <h2>Imagem</h2>
-        <img id="newsImage-extra" src="" alt="Imagem da notícia">
-
-        <!-- Botão para compartilhar no Extra -->
-        <button type="button" id="shareButtonExtra" onclick="shareOnWhatsApp('extra')">Compartilhar no WhatsApp</button>
-        <div id="messageShareExtra" class="message hidden">Botão Compartilhar clicado!</div>
-        
-        <button type="button" id="copyButtonExtra" onclick="generateCopyText('extra')">Gerar texto para copiar</button>
-        <div id="messageCopyExtra" class="message hidden">Botão Gerar Texto clicado!</div>
-    </div>
-
-    <!-- Área para exibir o texto formatado para copiar -->
-    <div id="copy-text-section" class="hidden">
-        <h3>Texto para copiar</h3>
-        <textarea id="copyTextArea" rows="6"></textarea>
-    </div>
-
-    <!-- Botões para ações -->
-    <div>
-        <button type="button" class="hidden" id="clearButton" onclick="clearForm()">Limpar</button>
-        <div id="messageClear" class="message hidden">Botão Limpar clicado!</div>
-        <button type="button" onclick="scrollToTop()">Voltar ao topo</button>
-        <div id="messageTop" class="message hidden">Botão Voltar ao Topo clicado!</div>
-    </div>
-
-    <script>
-        function buttonClicked(buttonId, messageId) {
-            document.getElementById(buttonId).classList.add('clicked');
-            document.getElementById(messageId).classList.remove('hidden');
-        }
-
-        async function fetchContentGlobo() {
-            buttonClicked('globo-section', 'messageGlobo');
-            const articleUrl = document.getElementById('globoUrl').value;
-            document.getElementById('globo-content').classList.add('hidden');
-            document.getElementById('clearButton').classList.add('hidden');
-
-            try {
-                const proxyUrl = 'https://api.allorigins.win/raw?url=';
-                const urlWithTimestamp = `${proxyUrl}${encodeURIComponent(articleUrl)}?timestamp=${new Date().getTime()}`;
-
-                const response = await fetch(urlWithTimestamp);
-                const htmlText = await response.text();
-                
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(htmlText, 'text/html');
-
-                const titleElement = doc.querySelector('meta[property="og:title"]');
-                const title = titleElement ? titleElement.getAttribute('content').trim() : 'Título não encontrado';  // Usando trim()
-
-                const descriptionMeta = doc.querySelector('meta[property="og:description"]');
-                const description = descriptionMeta ? descriptionMeta.getAttribute('content').trim() : 'Descrição não encontrada';  // Usando trim()
-
-                const imageElement = doc.querySelector('meta[property="og:image"]');
-                const imageUrl = imageElement ? imageElement.getAttribute('content') : null;
-
-                document.getElementById('title-globo').value = title;
-                document.getElementById('description-globo').value = description;
-
-                if (imageUrl) {
-                    document.getElementById('newsImage-globo').src = imageUrl;
-                    document.getElementById('newsImage-globo').style.display = 'block';
-                } else {
-                    document.getElementById('newsImage-globo').style.display = 'none';
-                }
-
-                document.getElementById('globo-content').classList.remove('hidden');
-                document.getElementById('clearButton').classList.remove('hidden');
-            } catch (error) {
-                console.error('Erro ao capturar o conteúdo do Globo:', error);
-                alert('Erro ao capturar o conteúdo. Verifique o link.');
-            }
-        }
-
-        async function fetchContentExtra() {
-            buttonClicked('extra-section', 'messageExtra');
-            const articleUrl = document.getElementById('extraUrl').value;
-            document.getElementById('extra-content').classList.add('hidden');
-            document.getElementById('clearButton').classList.add('hidden');
-
-            try {
-                const response = await fetch(articleUrl);
-                const htmlText = await response.text();
-
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(htmlText, 'text/html');
-
-                const titleElement = doc.querySelector('h1.content-head__title');
-                const title = titleElement ? titleElement.textContent.trim() : 'Título não encontrado';  // Usando trim()
-
-                const subtitleElement = doc.querySelector('h2.content-head__subtitle');
-                const description = subtitleElement ? subtitleElement.textContent.trim() : 'Subtítulo não encontrado';  // Usando trim()
-
-                const imageElement = doc.querySelector('meta[property="og:image"]');
-                const imageUrl = imageElement ? imageElement.getAttribute('content') : null;
-
-                document.getElementById('title-extra').value = title;
-                document.getElementById('description-extra').value = description;
-
-                if (imageUrl) {
-                    document.getElementById('newsImage-extra').src = imageUrl;
-                    document.getElementById('newsImage-extra').style.display = 'block';
-                } else {
-                    document.getElementById('newsImage-extra').style.display = 'none';
-                }
-
-                document.getElementById('extra-content').classList.remove('hidden');
-                document.getElementById('clearButton').classList.remove('hidden');
-            } catch (error) {
-                console.error('Erro ao capturar o conteúdo do Extra:', error);
-                alert('Erro ao capturar o conteúdo. Verifique o link.');
-            }
-        }
-
-        async function shareOnWhatsApp(source) {
-            if (source === 'globo') {
-                buttonClicked('shareButtonGlobo', 'messageShareGlobo');
-            } else {
-                buttonClicked('shareButtonExtra', 'messageShareExtra');
-            }
-            let title = '';
-            let description = '';
-            let articleUrl = '';
-
-            if (source === 'globo') {
-                title = document.getElementById('title-globo').value.trim();  // Usando trim()
-                description = document.getElementById('description-globo').value.trim();  // Usando trim()
-                articleUrl = document.getElementById('globoUrl').value;
-            } else if (source === 'extra') {
-                title = document.getElementById('title-extra').value.trim();  // Usando trim()
-                description = document.getElementById('description-extra').value.trim();  // Usando trim()
-                articleUrl = document.getElementById('extraUrl').value;
-            }
-
-            const shortUrl = await encurtarUrl(articleUrl);
-
-            const mensagem = `*${title.toUpperCase()}*\n\n${description}\n\n➡️ Leia aqui: ${shortUrl}`;
-
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
-
-            window.open(whatsappUrl, '_blank');
-
-            document.getElementById('clearButton').classList.remove('hidden');
-        }
-
-        async function generateCopyText(source) {
-            if (source === 'globo') {
-                buttonClicked('copyButtonGlobo', 'messageCopyGlobo');
-            } else {
-                buttonClicked('copyButtonExtra', 'messageCopyExtra');
-            }
-            let title = '';
-            let description = '';
-            let articleUrl = '';
-
-            if (source === 'globo') {
-                title = document.getElementById('title-globo').value.trim();  // Usando trim()
-                description = document.getElementById('description-globo').value.trim();  // Usando trim()
-                articleUrl = document.getElementById('globoUrl').value;
-            } else if (source === 'extra') {
-                title = document.getElementById('title-extra').value.trim();  // Usando trim()
-                description = document.getElementById('description-extra').value.trim();  // Usando trim()
-                articleUrl = document.getElementById('extraUrl').value;
-            }
-
-            const shortUrl = await encurtarUrl(articleUrl);
-
-            const copyText = `*${title.toUpperCase()}*\n\n${description}\n\n➡️ Leia aqui: ${shortUrl}`;
-
-            document.getElementById('copyTextArea').value = copyText;
-            document.getElementById('copy-text-section').classList.remove('hidden');
-        }
-
-        async function encurtarUrl(longUrl) {
-            const apiUrl = 'https://api.tinyurl.com/create';
-            const apiKey = 'pJtDisay712pqvikxYaZRxjOXnycECCMgdk6EcnGENujgYWSy6BBQP6NaFLU';
-
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify({
-                    url: longUrl,
-                    domain: 'tiny.one'
-                })
-            });
-
-            const data = await response.json();
-            return data.data.tiny_url;
-        }
-
-        function clearForm() {
-            buttonClicked('clearButton', 'messageClear');
-            document.getElementById('globoUrl').value = '';
-            document.getElementById('extraUrl').value = '';
-            document.getElementById('title-globo').value = '';
-            document.getElementById('description-globo').value = '';
-            document.getElementById('newsImage-globo').src = '';
-            document.getElementById('title-extra').value = '';
-            document.getElementById('description-extra').value = '';
-            document.getElementById('newsImage-extra').src = '';
-
-            document.getElementById('globo-content').classList.add('hidden');
-            document.getElementById('extra-content').classList.add('hidden');
-            document.getElementById('copy-text-section').classList.add('hidden');
-            document.getElementById('clearButton').classList.add('hidden');
-        }
-
-        function scrollToTop() {
-            buttonClicked('scrollTopButton', 'messageTop');
-            window.scrollTo(0, 0);
-        }
-    </script>
-
+    <!-- Rodapé -->
+    <footer class="footer">
+        <p>Endereço: R. Liberdade, 56 - Califórnia, Nova Iguaçu - RJ, 26220-600</p>
+        <p>&copy; 2024 Associação de Blocos e Escolas de Samba de Nova Iguaçu</p>
+    </footer>
 </body>
 </html>
