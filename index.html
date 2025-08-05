@@ -1,225 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serviços Comunitários</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        /* Cabeçalho */
-        .header {
-            background-color: #003366;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-        }
-
-        /* Menu de navegação */
-        .navbar {
-            display: flex;
-            justify-content: center;
-            background-color: #002244;
-            padding: 10px;
-        }
-
-        .navbar a {
-            color: #fff;
-            padding: 10px 20px;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        .navbar a:hover {
-            background-color: #005599;
-        }
-
-        /* Contêiner principal */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Título principal */
-        .title {
-            text-align: center;
-            font-size: 2em;
-            color: #333;
-            margin-top: 20px;
-        }
-
-        /* Grid de serviços */
-        .services-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        /* Card de cada serviço */
-        .service-card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            width: 300px;
-            text-align: center;
-        }
-
-        .service-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .service-card h3 {
-            font-size: 1.5em;
-            color: #003366;
-            padding: 10px;
-        }
-
-        .service-card p {
-            padding: 10px;
-            color: #555;
-        }
-
-        /* Seção de Contato */
-        .contact-form {
-            background-color: #fff;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .contact-form h2 {
-            color: #003366;
-            text-align: center;
-        }
-
-        .contact-form label {
-            display: block;
-            margin: 10px 0 5px;
-            color: #333;
-        }
-
-        .contact-form input, .contact-form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .contact-form button {
-            background-color: #003366;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .contact-form button:hover {
-            background-color: #005599;
-        }
-
-        /* Rodapé */
-        .footer {
-            background-color: #003366;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .services-grid {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Notícias</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Cabeçalho -->
-    <header class="header">
-        <h1>Compromisso com a Comunidade</h1>
-        <p>Conheça os serviços oferecidos pela nossa associação.</p>
-    </header>
+  <!-- Botão para abrir/fechar o painel -->
+  <button id="toggle-panel" class="toggle-btn">
+    <i class="fas fa-newspaper"></i>
+    <span>Notícias</span>
+  </button>
 
-    <!-- Menu de navegação -->
-    <nav class="navbar">
-        <a href="#servicos">Serviços</a>
-        <a href="#contato">Contato</a>
-    </nav>
-
-    <!-- Contêiner principal -->
-    <div class="container">
-        <!-- Título da seção -->
-        <h2 class="title" id="servicos">Aulas e Serviços Comunitários</h2>
-
-        <!-- Grid de serviços -->
-        <div class="services-grid">
-            <!-- Card de Judô -->
-            <div class="service-card">
-                <img src="https://i.ibb.co/j6Dx1wP/Whats-App-Image-2024-11-15-at-10-32-43.jpg">
-                <h3>Aula de Judô</h3>
-                <p>Aprenda técnicas de defesa pessoal e desenvolva disciplina e respeito com nossas aulas de judô.</p>
-            </div>
-
-            <!-- Card de Culinária -->
-            <div class="service-card">
-                <img src="https://i.ibb.co/qM8mrQd/Whats-App-Image-2024-11-15-at-10-32-43-3.jpg" alt="Aula de Culinária">
-                <h3>Aula de Culinária</h3>
-                <p>Descubra receitas deliciosas e aprenda a cozinhar com ingredientes acessíveis e técnicas simples.</p>
-            </div>
-
-            <!-- Card de Workshops de Saúde -->
-            <div class="service-card">
-                <img src="https://i.ibb.co/2Y7tWcX/Whats-App-Image-2024-11-15-at-11-01-45.jpg" alt="Workshop sobre Saúde e Bem-Estar">
-                <h3>Workshop sobre Saúde e Bem-Estar</h3>
-                <p>Participe de nossos workshops que promovem hábitos saudáveis para uma vida melhor.</p>
-            </div>
-
-            <!-- Card de Ioga e Meditação -->
-            <div class="service-card">
-                <img src="https://i.ibb.co/GVD6KBV/Whats-App-Image-2024-11-15-at-10-59-50.jpg" alt="Aula de Ioga e Meditação">
-                <h3>Aula de Ioga e Meditação</h3>
-                <p>Pratique ioga e meditação para relaxar, aliviar o estresse e melhorar o bem-estar mental e físico.</p>
-            </div>
-        </div>
-
-        <!-- Formulário de Contato -->
-        <div class="contact-form" id="contato">
-            <h2>Contato</h2>
-            <form action="mailto:gazeredo@gmail.com" method="post" enctype="text/plain">
-                <label for="name">Nome:</label>
-                <input type="text" id="name" name="name" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="message">Mensagem:</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
-
-                <button type="submit">Enviar Mensagem</button>
-            </form>
-        </div>
+  <!-- Painel deslizante de notícias -->
+  <div id="news-panel" class="news-panel">
+    <div class="panel-header">
+      <h2>
+        <i class="fas fa-newspaper"></i>
+        Últimas Notícias
+      </h2>
+      <button id="close-panel" class="close-btn">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
+    
+    <div class="panel-content">
+      <div id="loading" class="loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Carregando notícias...</span>
+      </div>
+      
+      <div id="noticias" class="news-container">
+        <!-- Cards de notícias serão inseridos aqui dinamicamente -->
+      </div>
+    </div>
+  </div>
 
-    <!-- Rodapé -->
-    <footer class="footer">
-        <p>Endereço: R. Liberdade, 56 - Califórnia, Nova Iguaçu - RJ, 26220-600</p>
-        <p>&copy; 2024 Associação de Blocos e Escolas de Samba de Nova Iguaçu</p>
-    </footer>
+  <!-- Overlay para fechar o painel em dispositivos móveis -->
+  <div id="overlay" class="overlay"></div>
+
+  <script src="sidebar.js"></script>
 </body>
 </html>
+
